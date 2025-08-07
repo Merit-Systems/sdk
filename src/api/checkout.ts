@@ -51,7 +51,7 @@ export class CheckoutAPI {
       .filter(Boolean);
 
     const url = new URL(this.baseCheckoutURL);
-    url.searchParams.set('items', JSON.stringify(encodedItems));
+    url.searchParams.set('recipients', encodedItems.join(','));
 
     // Add group ID (auto-generate if not provided)
     const finalGroupId = groupId || this.generateGroupId();

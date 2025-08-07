@@ -89,7 +89,7 @@
                     }).filter(Boolean);
 
                     const url = new URL('https://terminal.merit.systems/checkout');
-                    url.searchParams.set('items', JSON.stringify(encodedItems));
+                    url.searchParams.set('recipients', encodedItems.join(','));
 
                     const finalGroupId = groupId || this.generateGroupId();
                     url.searchParams.set('groupId', finalGroupId);
@@ -149,8 +149,10 @@
             // Test URL parsing in browser
             log('✅ Test 6: Browser URL Parsing', 'pass');
             const testUrl = new URL(userUrl);
-            const items = JSON.parse(testUrl.searchParams.get('items'));
-            log(`   ✓ Items parsed: ${JSON.stringify(items)}`);
+            const recipientsString = testUrl.searchParams.get('recipients');
+            const recipients = recipientsString.split(',');
+            log(`   ✓ Recipients parsed: ${recipientsString}`);
+            log(`   ✓ Recipients array: ${JSON.stringify(recipients)}`);
             log(`   ✓ Group ID: ${testUrl.searchParams.get('groupId')}`);
 
             log('🎉 All browser tests passed! SDK is browser-compatible.', 'pass');

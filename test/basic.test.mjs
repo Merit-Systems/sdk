@@ -29,8 +29,8 @@ try {
   if (userUrl.hostname !== 'terminal.merit.systems') {
     throw new Error('Invalid hostname in checkout URL');
   }
-  if (!userUrl.searchParams.get('items')) {
-    throw new Error('Missing items parameter in checkout URL');
+  if (!userUrl.searchParams.get('recipients')) {
+    throw new Error('Missing recipients parameter in checkout URL');
   }
   if (!userUrl.searchParams.get('groupId')) {
     throw new Error('Missing groupId parameter in checkout URL');
@@ -72,14 +72,15 @@ try {
   // Test 6: URL parameter parsing
   console.log('\n✅ Test 6: URL parameter validation');
   const testUrl = new URL(userCheckoutUrl);
-  const items = JSON.parse(testUrl.searchParams.get('items'));
-  if (!Array.isArray(items) || items.length !== 1) {
-    throw new Error('Invalid items encoding');
+  const recipientsString = testUrl.searchParams.get('recipients');
+  const recipients = recipientsString.split(',');
+  if (!Array.isArray(recipients) || recipients.length !== 1) {
+    throw new Error('Invalid recipients encoding');
   }
-  if (items[0] !== 'u_583231_50.00') {
-    throw new Error('Invalid item encoding format');
+  if (recipients[0] !== 'u_583231_50.00') {
+    throw new Error('Invalid recipient encoding format');
   }
-  console.log('   ✓ Items parameter correctly encoded:', items);
+  console.log('   ✓ Recipients parameter correctly encoded:', recipientsString);
 
   console.log('\n🎉 All tests passed! SDK is working correctly.\n');
 } catch (error) {
