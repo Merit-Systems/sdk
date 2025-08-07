@@ -5,7 +5,7 @@ import tsparser from '@typescript-eslint/parser';
 export default [
   js.configs.recommended,
   {
-    files: ['**/*.{ts,tsx}'],
+    files: ['src/**/*.{ts,tsx}'],
     languageOptions: {
       parser: tsparser,
       parserOptions: {
@@ -31,6 +31,23 @@ export default [
     },
   },
   {
-    ignores: ['dist/**', 'node_modules/**', '*.js', '*.mjs'],
+    files: ['test/**/*.{js,mjs,ts}'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: {
+        console: 'readonly',
+        process: 'readonly',
+        URL: 'readonly',
+        URLSearchParams: 'readonly',
+      },
+    },
+    rules: {
+      'no-console': 'off', // Allow console in tests
+      'prefer-const': 'error',
+    },
+  },
+  {
+    ignores: ['dist/**', 'node_modules/**'],
   },
 ];
