@@ -7,7 +7,7 @@ export class PaymentsAPI extends BaseAPI {
    * @param senderGithubId - The GitHub ID of the sender
    * @param filter - Optional filters for the payments query
    * @param filter.groupId - Filter by specific group ID (UUID)
-   * @param filter.status - Filter by payment status
+
    * @param filter.limit - Maximum number of results to return
    * @param filter.offset - Number of results to skip (for pagination)
    * @returns Promise resolving to array of payments
@@ -17,10 +17,9 @@ export class PaymentsAPI extends BaseAPI {
    * // Get all payments sent by user
    * const payments = await sdk.payments.getPaymentsBySender(583231);
    *
-   * // Get completed payments in a specific group
+   * // Get payments in a specific group
    * const groupPayments = await sdk.payments.getPaymentsBySender(583231, {
    *   groupId: 'uuid-group-id',
-   *   status: 'completed',
    *   limit: 10
    * });
    * ```
@@ -31,7 +30,7 @@ export class PaymentsAPI extends BaseAPI {
   ): Promise<Payment[]> {
     const params = new URLSearchParams();
     if (filter?.groupId) params.append('groupId', filter.groupId);
-    if (filter?.status) params.append('status', filter.status);
+
     if (filter?.limit) params.append('limit', filter.limit.toString());
     if (filter?.offset) params.append('offset', filter.offset.toString());
 
@@ -53,7 +52,7 @@ export class PaymentsAPI extends BaseAPI {
    * Get payments received by a specific user
    * @param receiverGithubId - The GitHub ID of the receiver
    * @param filter - Optional filters for the payments query
-   * @param filter.status - Filter by payment status
+
    * @param filter.limit - Maximum number of results to return
    * @param filter.offset - Number of results to skip (for pagination)
    * @returns Promise resolving to array of payments
@@ -63,9 +62,8 @@ export class PaymentsAPI extends BaseAPI {
    * // Get all payments received by user
    * const payments = await sdk.payments.getPaymentsByReceiver(583231);
    *
-   * // Get recent completed payments
+   * // Get recent payments
    * const recentPayments = await sdk.payments.getPaymentsByReceiver(583231, {
-   *   status: 'completed',
    *   limit: 5
    * });
    * ```
@@ -75,7 +73,7 @@ export class PaymentsAPI extends BaseAPI {
     filter?: Omit<PaymentsFilter, 'groupId'>
   ): Promise<Payment[]> {
     const params = new URLSearchParams();
-    if (filter?.status) params.append('status', filter.status);
+
     if (filter?.limit) params.append('limit', filter.limit.toString());
     if (filter?.offset) params.append('offset', filter.offset.toString());
 

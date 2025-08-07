@@ -31,7 +31,6 @@ export interface CheckoutItem {
 
 export interface PaymentsFilter {
   groupId?: string;
-  status?: Payment['status'];
   limit?: number;
   offset?: number;
 }

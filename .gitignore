@@ -132,3 +132,6 @@ Thumbs.db
 # Test output
 test-results/
 playwright-report/
+
+# Keep test files but exclude from npm package
+# (handled in package.json files array)
