@@ -14,10 +14,12 @@ export interface MeritSDKConfig {
   baseURL?: string;
 }
 
-export type APIResponse<T> = {
-  data: T;
-  success: true;
-} | {
-  error: MeritAPIError;
-  success: false;
-};
+export type APIResponse<T> =
+  | {
+      data: T;
+      success: true;
+    }
+  | {
+      error: MeritAPIError;
+      success: false;
+    };

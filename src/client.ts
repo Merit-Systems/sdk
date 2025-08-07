@@ -10,22 +10,24 @@ export class MeritSDK {
   }
 
   async getUserBalance(githubId: string): Promise<UserBalance> {
-    const response = await this.request<UserBalance>(`/users/${githubId}/balance`);
-    
+    const response = await this.request<UserBalance>(
+      `/users/${githubId}/balance`
+    );
+
     if (!response.success) {
       throw new Error(`Merit API Error: ${response.error.message}`);
     }
-    
+
     return response.data;
   }
 
   private async request<T>(endpoint: string): Promise<APIResponse<T>> {
     const url = `${this.baseURL}${endpoint}`;
-    
+
     try {
       const response = await fetch(url, {
         headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
+          Authorization: `Bearer ${this.apiKey}`,
           'Content-Type': 'application/json',
         },
       });
@@ -51,7 +53,8 @@ export class MeritSDK {
         success: false,
         error: {
           code: 'NETWORK_ERROR',
-          message: error instanceof Error ? error.message : 'Network request failed',
+          message:
+            error instanceof Error ? error.message : 'Network request failed',
         },
       };
     }
