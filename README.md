@@ -1,8 +1,8 @@
 # Merit Systems SDK
 
-A TypeScript SDK for interacting with the Merit Systems API. Built with modern TypeScript, full type safety, and comprehensive error handling.
+A minimal TypeScript SDK for interacting with the Merit Systems API.
 
-## 🚀 Installation
+## Installation
 
 ```bash
 npm install @merit-systems/sdk
@@ -12,26 +12,26 @@ pnpm add @merit-systems/sdk
 yarn add @merit-systems/sdk
 ```
 
-## 📋 Requirements
+## Requirements
 
 - Node.js 18+ (for native `fetch` support)
 - TypeScript 5.0+ (optional, but recommended)
 
-## 🔧 Quick Start
+## Quick Start
 
 ```typescript
 import { MeritSDK } from '@merit-systems/sdk';
 
-const sdk = new MeritSDK({
+const merit = new MeritSDK({
   apiKey: 'your-api-key',
   baseURL: 'https://api.merit.systems' // optional
 });
 
 // Get user balance by GitHub login
-const balance = await sdk.balances.getBalanceByLogin('username');
+const balance = await merit.balances.getBalanceByLogin('username');
 console.log(`Balance: ${balance.balance} ${balance.currency}`);
 ```
 
-## 📚 API Reference
+## API Reference
 
 // TODO when api is finalized
