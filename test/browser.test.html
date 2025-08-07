@@ -77,7 +77,8 @@
             }
 
             class MockCheckoutAPI {
-                generateCheckoutUrl(items, groupId) {
+                generateCheckoutUrl(params) {
+                    const { items, groupId, senderGithubId } = params;
                     const encodedItems = items.map(item => {
                         const amount = item.amount.toFixed(2);
                         if (item.type === 'user') {
@@ -93,6 +94,11 @@
 
                     const finalGroupId = groupId || this.generateGroupId();
                     url.searchParams.set('groupId', finalGroupId);
+
+                    // Add sender if provided
+                    if (senderGithubId) {
+                        url.searchParams.set('sender', senderGithubId.toString());
+                    }
 
                     return url.toString();
                 }
@@ -121,28 +127,33 @@
             });
             log('   ✓ SDK instance created successfully');
 
-            // Test single user checkout
-            log('✅ Test 3: Single User Checkout URL', 'pass');
-            const userUrl = merit.checkout.generateCheckoutUrl([
-                { id: 583231, type: 'user', amount: 50.00 }
-            ]);
+            // Test single user checkout (new API)
+            log('✅ Test 3: Single User Checkout URL (New API)', 'pass');
+            const userUrl = merit.checkout.generateCheckoutUrl({
+                items: [{ id: 583231, type: 'user', amount: 50.00 }]
+            });
             log(`   ✓ Generated URL: ${userUrl}`);
             logCode(userUrl);
 
-            // Test multiple items
-            log('✅ Test 4: Multiple Items Checkout URL', 'pass');
-            const multiUrl = merit.checkout.generateCheckoutUrl([
-                { id: 583231, type: 'user', amount: 25.00 },
-                { id: 123456, type: 'repo', amount: 75.00 }
-            ]);
-            log(`   ✓ Generated multi-item URL: ${multiUrl}`);
+            // Test multiple items with sender
+            log('✅ Test 4: Multiple Items with Sender', 'pass');
+            const multiUrl = merit.checkout.generateCheckoutUrl({
+                items: [
+                    { id: 583231, type: 'user', amount: 25.00 },
+                    { id: 123456, type: 'repo', amount: 75.00 }
+                ],
+                senderGithubId: 987654
+            });
+            log(`   ✓ Generated multi-item URL with sender: ${multiUrl}`);
             logCode(multiUrl);
 
-            // Test custom group ID
-            log('✅ Test 5: Custom Group ID', 'pass');
-            const customUrl = merit.checkout.generateCheckoutUrl([
-                { id: 583231, type: 'user', amount: 100.00 }
-            ], 'browser-test-group');
+            // Test custom group ID with new API
+            log('✅ Test 5: Custom Group ID (New API)', 'pass');
+            const customUrl = merit.checkout.generateCheckoutUrl({
+                items: [{ id: 583231, type: 'user', amount: 100.00 }],
+                groupId: 'browser-test-group',
+                senderGithubId: 555444
+            });
             log(`   ✓ Generated custom group URL: ${customUrl}`);
             logCode(customUrl);
 

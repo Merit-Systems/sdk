@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import type { CheckoutItem } from '../types.js';
+import type { CheckoutParams } from '../types.js';
 
 export class CheckoutAPI {
   private readonly baseCheckoutURL: string;
@@ -12,31 +12,30 @@ export class CheckoutAPI {
 
   /**
    * Generate a checkout URL for payments to users and repositories
-   * @param items - Array of checkout items (users or repos with amounts)
-   * @param groupId - Optional group ID to associate payments (auto-generated if not provided)
+   * @param params - Checkout parameters including items, optional group ID, and optional sender
    * @returns Checkout URL string
    * @example
    * ```typescript
    * // Pay a user
-   * const checkoutUrl = sdk.checkout.generateCheckoutUrl([
-   *   { id: 583231, type: 'user', amount: 50.00 }
-   * ]);
+   * const checkoutUrl = merit.checkout.generateCheckoutUrl({
+   *   items: [{ id: 583231, type: 'user', amount: 50.00 }]
+   * });
    *
-   * // Pay multiple users and repos with custom group ID
-   * const checkoutUrl = sdk.checkout.generateCheckoutUrl([
-   *   { id: 583231, type: 'user', amount: 25.00 },
-   *   { id: 123456, type: 'repo', amount: 75.50 }
-   * ], 'my-custom-group-id');
-   *
-   * // Pay with auto-generated group ID
-   * const checkoutUrl = sdk.checkout.generateCheckoutUrl([
-   *   { id: 583231, type: 'user', amount: 25.00 }
-   * ]); // Group ID will be auto-generated
+   * // Pay multiple users and repos with custom group ID and sender
+   * const checkoutUrl = merit.checkout.generateCheckoutUrl({
+   *   items: [
+   *     { id: 583231, type: 'user', amount: 25.00 },
+   *     { id: 123456, type: 'repo', amount: 75.50 }
+   *   ],
+   *   groupId: 'my-custom-group-id',
+   *   senderGithubId: 987654
+   * });
    *
    * console.log(`Pay here: ${checkoutUrl}`);
    * ```
    */
-  generateCheckoutUrl(items: CheckoutItem[], groupId?: string): string {
+  generateCheckoutUrl(params: CheckoutParams): string {
+    const { items, groupId, senderGithubId } = params;
     const encodedItems = items
       .map(item => {
         const amount = item.amount.toFixed(2);
@@ -56,6 +55,11 @@ export class CheckoutAPI {
     // Add group ID (auto-generate if not provided)
     const finalGroupId = groupId || this.generateGroupId();
     url.searchParams.set('groupId', finalGroupId);
+
+    // Add sender if provided
+    if (senderGithubId) {
+      url.searchParams.set('sender', senderGithubId.toString());
+    }
 
     return url.toString();
   }

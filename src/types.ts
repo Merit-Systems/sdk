@@ -29,6 +29,12 @@ export interface CheckoutItem {
   amount: number;
 }
 
+export interface CheckoutParams {
+  items: CheckoutItem[];
+  groupId?: string;
+  senderGithubId?: number;
+}
+
 export interface PaymentsFilter {
   groupId?: string;
   limit?: number;
