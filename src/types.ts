@@ -1,7 +1,39 @@
 export interface UserBalance {
-  githubId: string;
+  githubId: number;
+  login: string;
   balance: number;
   currency: string;
+}
+
+export interface Payment {
+  id: string;
+  amount: number;
+  currency: string;
+  sender: {
+    githubId: number;
+    login: string;
+  };
+  receiver: {
+    githubId: number;
+    login: string;
+  };
+  groupId?: string;
+  status: 'pending' | 'completed' | 'failed';
+  createdAt: string;
+  completedAt?: string;
+}
+
+export interface CheckoutItem {
+  id: number; // GitHub ID (user or repo)
+  type: 'user' | 'repo';
+  amount: number;
+}
+
+export interface PaymentsFilter {
+  groupId?: string;
+  status?: Payment['status'];
+  limit?: number;
+  offset?: number;
 }
 
 export interface MeritAPIError {

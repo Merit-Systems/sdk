@@ -1,7 +1,7 @@
 {
   "name": "@merit-systems/sdk",
   "version": "0.1.0",
-  "description": "TypeScript SDK for the Merit API",
+  "description": "TypeScript SDK for the Merit Systems API",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -32,9 +32,13 @@
     "typescript"
   ],
   "license": "MIT",
+  "dependencies": {
+    "uuid": "^10.0.0"
+  },
   "devDependencies": {
     "typescript": "^5.5.0",
     "@types/node": "^20.0.0",
+    "@types/uuid": "^10.0.0",
     "@eslint/js": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",

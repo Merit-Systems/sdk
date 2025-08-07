@@ -1,62 +1,18 @@
-import type { MeritSDKConfig, UserBalance, APIResponse } from './types.js';
+import { BalancesAPI } from './api/balances.js';
+import { CheckoutAPI } from './api/checkout.js';
+import { PaymentsAPI } from './api/payments.js';
+import type { MeritSDKConfig } from './types.js';
 
 export class MeritSDK {
-  private readonly apiKey: string;
-  private readonly baseURL: string;
+  public readonly balances: BalancesAPI;
+  public readonly payments: PaymentsAPI;
+  public readonly checkout: CheckoutAPI;
 
   constructor(config: MeritSDKConfig) {
-    this.apiKey = config.apiKey;
-    this.baseURL = config.baseURL ?? 'https://api.merit.systems';
-  }
+    const baseURL = config.baseURL ?? 'https://api.merit.systems';
 
-  async getUserBalance(githubId: string): Promise<UserBalance> {
-    const response = await this.request<UserBalance>(
-      `/users/${githubId}/balance`
-    );
-
-    if (!response.success) {
-      throw new Error(`Merit API Error: ${response.error.message}`);
-    }
-
-    return response.data;
-  }
-
-  private async request<T>(endpoint: string): Promise<APIResponse<T>> {
-    const url = `${this.baseURL}${endpoint}`;
-
-    try {
-      const response = await fetch(url, {
-        headers: {
-          Authorization: `Bearer ${this.apiKey}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        return {
-          success: false,
-          error: {
-            code: response.status.toString(),
-            message: data.message ?? 'Unknown error occurred',
-          },
-        };
-      }
-
-      return {
-        success: true,
-        data,
-      };
-    } catch (error) {
-      return {
-        success: false,
-        error: {
-          code: 'NETWORK_ERROR',
-          message:
-            error instanceof Error ? error.message : 'Network request failed',
-        },
-      };
-    }
+    this.balances = new BalancesAPI(config.apiKey, baseURL);
+    this.payments = new PaymentsAPI(config.apiKey, baseURL);
+    this.checkout = new CheckoutAPI(); // No API calls needed for checkout
   }
 }

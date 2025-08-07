@@ -15,6 +15,8 @@ export default [
       globals: {
         fetch: 'readonly',
         console: 'readonly',
+        URLSearchParams: 'readonly',
+        URL: 'readonly',
       },
     },
     plugins: {
@@ -22,10 +24,10 @@ export default [
     },
     rules: {
       '@typescript-eslint/no-unused-vars': 'error',
-      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-explicit-any': 'error',
       'prefer-const': 'error',
       '@typescript-eslint/no-non-null-assertion': 'error',
-      'no-console': 'warn',
+      'no-console': 'error',
     },
   },
   {

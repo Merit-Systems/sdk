@@ -1,7 +1,10 @@
 export { MeritSDK } from './client.js';
 export type {
-  UserBalance,
+  APIResponse,
+  CheckoutItem,
   MeritAPIError,
   MeritSDKConfig,
-  APIResponse,
+  Payment,
+  PaymentsFilter,
+  UserBalance,
 } from './types.js';
