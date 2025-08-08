@@ -10,9 +10,11 @@ export class MeritSDK {
 
   constructor(config: MeritSDKConfig) {
     const baseURL = config.baseURL ?? 'https://api.merit.systems';
+    const checkoutURL =
+      config.checkoutURL ?? 'https://terminal.merit.systems/checkout';
 
     this.balances = new BalancesAPI(config.apiKey, baseURL);
     this.payments = new PaymentsAPI(config.apiKey, baseURL);
-    this.checkout = new CheckoutAPI(); // No API calls needed for checkout
+    this.checkout = new CheckoutAPI(checkoutURL);
   }
 }

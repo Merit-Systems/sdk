@@ -49,6 +49,7 @@ export interface MeritAPIError {
 export interface MeritSDKConfig {
   apiKey: string;
   baseURL?: string;
+  checkoutURL?: string;
 }
 
 export type APIResponse<T> =
