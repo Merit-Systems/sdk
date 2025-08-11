@@ -1,4 +1,8 @@
-import { type OutgoingPayment, type OutgoingUserPaymentsParams, type PaginatedResponse } from '../types.js';
+import {
+  type OutgoingPayment,
+  type OutgoingUserPaymentsParams,
+  type PaginatedResponse,
+} from '../types.js';
 import { BaseAPI } from './base.js';
 
 export class PaymentsAPI extends BaseAPI {
@@ -25,11 +29,12 @@ export class PaymentsAPI extends BaseAPI {
    */
   async getPaymentsBySender(
     senderGithubId: number,
-    params?: OutgoingUserPaymentsParams,
+    params?: OutgoingUserPaymentsParams
   ): Promise<PaginatedResponse<OutgoingPayment>> {
     const queryParams = new URLSearchParams();
     if (params?.group_id) queryParams.append('group_id', params.group_id);
-    if (params?.page_size) queryParams.append('page_size', params.page_size.toString());
+    if (params?.page_size)
+      queryParams.append('page_size', params.page_size.toString());
     if (params?.page) queryParams.append('page', params.page.toString());
 
     const queryString = queryParams.toString();
@@ -37,7 +42,8 @@ export class PaymentsAPI extends BaseAPI {
       queryString ? `?${queryString}` : ''
     }`;
 
-    const response = await this.request<PaginatedResponse<OutgoingPayment>>(endpoint);
+    const response =
+      await this.request<PaginatedResponse<OutgoingPayment>>(endpoint);
 
     return response;
   }

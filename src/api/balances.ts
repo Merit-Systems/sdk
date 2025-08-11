@@ -53,8 +53,13 @@ export class BalancesAPI extends BaseAPI {
    * console.log(`Repository ${repoBalance.owner}/${repoBalance.repo} has ${repoBalance.balance.raw}`);
    * ```
    */
-  async getRepoBalanceByName(owner: string, repo: string): Promise<RepoBalance> {
-    const response = await this.request<RepoBalance>(`/repos/${owner}/${repo}/balance`);
+  async getRepoBalanceByName(
+    owner: string,
+    repo: string
+  ): Promise<RepoBalance> {
+    const response = await this.request<RepoBalance>(
+      `/repos/${owner}/${repo}/balance`
+    );
 
     return response;
   }
@@ -72,8 +77,10 @@ export class BalancesAPI extends BaseAPI {
    * ```
    */
   async getRepoBalanceByRepoId(githubId: number): Promise<RepoBalance> {
-    const response = await this.request<RepoBalance>(`/repositories/${githubId}/balance`);
-    
+    const response = await this.request<RepoBalance>(
+      `/repositories/${githubId}/balance`
+    );
+
     return response;
   }
 }

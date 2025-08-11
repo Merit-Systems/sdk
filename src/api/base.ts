@@ -1,4 +1,11 @@
-import { BadRequestError, InternalServerError, NotFoundError, UnauthorizedError, MeritError, type APIResponse } from '../types.js';
+import {
+  BadRequestError,
+  InternalServerError,
+  NotFoundError,
+  UnauthorizedError,
+  MeritError,
+  type APIResponse,
+} from '../types.js';
 
 export abstract class BaseAPI {
   protected readonly apiKey: string;
@@ -28,7 +35,7 @@ export abstract class BaseAPI {
             throw new BadRequestError({
               status: response.status,
               message: data.message ?? 'Unknown error occurred',
-            }) ;
+            });
           case 401:
             throw new UnauthorizedError({
               status: response.status,
