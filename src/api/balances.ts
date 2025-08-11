@@ -1,4 +1,4 @@
-import { MeritError, type RepoBalance, type UserBalance } from '../types.js';
+import { type RepoBalance, type UserBalance } from '../types.js';
 import { BaseAPI } from './base.js';
 
 export class BalancesAPI extends BaseAPI {
