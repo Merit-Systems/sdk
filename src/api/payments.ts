@@ -1,17 +1,16 @@
-import type { Payment, PaymentsFilter } from '../types.js';
+import { MeritError, type OutgoingPayment, type OutgoingUserPaymentsParams, type PaginatedResponse } from '../types.js';
 import { BaseAPI } from './base.js';
 
 export class PaymentsAPI extends BaseAPI {
   /**
    * Get payments sent by a specific user
    * @param senderGithubId - The GitHub ID of the sender
-   * @param filter - Optional filters for the payments query
-   * @param filter.groupId - Filter by specific group ID (UUID)
-
-   * @param filter.limit - Maximum number of results to return
-   * @param filter.offset - Number of results to skip (for pagination)
+   * @param params - Optional parameters for the payments query
+   * @param params.groupId - Filter by specific group ID (UUID)
+   * @param params.page_size - Maximum number of results to return [default = 50]
+   * @param params.page - Number of results to skip (for pagination) [default = 1]
    * @returns Promise resolving to array of payments
-   * @throws Error if API request fails
+   * @throws MeritError if API request fails
    * @example
    * ```typescript
    * // Get all payments sent by user
@@ -26,66 +25,22 @@ export class PaymentsAPI extends BaseAPI {
    */
   async getPaymentsBySender(
     senderGithubId: number,
-    filter?: PaymentsFilter
-  ): Promise<Payment[]> {
-    const params = new URLSearchParams();
-    if (filter?.groupId) params.append('groupId', filter.groupId);
+    params?: OutgoingUserPaymentsParams,
+  ): Promise<PaginatedResponse<OutgoingPayment>> {
+    const queryParams = new URLSearchParams();
+    if (params?.groupId) queryParams.append('groupId', params.groupId);
+    if (params?.page_size) queryParams.append('page_size', params.page_size.toString());
+    if (params?.page) queryParams.append('page', params.page.toString());
 
-    if (filter?.limit) params.append('limit', filter.limit.toString());
-    if (filter?.offset) params.append('offset', filter.offset.toString());
-
-    const queryString = params.toString();
-    const endpoint = `/payments/sender/${senderGithubId}${
+    const queryString = queryParams.toString();
+    const endpoint = `/user/${senderGithubId}/payments${
       queryString ? `?${queryString}` : ''
     }`;
 
-    const response = await this.request<Payment[]>(endpoint);
+    const response = await this.request<PaginatedResponse<OutgoingPayment>>(endpoint);
 
     if (!response.success) {
-      throw new Error(`Merit API Error: ${response.error.message}`);
-    }
-
-    return response.data;
-  }
-
-  /**
-   * Get payments received by a specific user
-   * @param receiverGithubId - The GitHub ID of the receiver
-   * @param filter - Optional filters for the payments query
-
-   * @param filter.limit - Maximum number of results to return
-   * @param filter.offset - Number of results to skip (for pagination)
-   * @returns Promise resolving to array of payments
-   * @throws Error if API request fails
-   * @example
-   * ```typescript
-   * // Get all payments received by user
-   * const payments = await sdk.payments.getPaymentsByReceiver(583231);
-   *
-   * // Get recent payments
-   * const recentPayments = await sdk.payments.getPaymentsByReceiver(583231, {
-   *   limit: 5
-   * });
-   * ```
-   */
-  async getPaymentsByReceiver(
-    receiverGithubId: number,
-    filter?: Omit<PaymentsFilter, 'groupId'>
-  ): Promise<Payment[]> {
-    const params = new URLSearchParams();
-
-    if (filter?.limit) params.append('limit', filter.limit.toString());
-    if (filter?.offset) params.append('offset', filter.offset.toString());
-
-    const queryString = params.toString();
-    const endpoint = `/payments/receiver/${receiverGithubId}${
-      queryString ? `?${queryString}` : ''
-    }`;
-
-    const response = await this.request<Payment[]>(endpoint);
-
-    if (!response.success) {
-      throw new Error(`Merit API Error: ${response.error.message}`);
+      throw new MeritError(response.error);
     }
 
     return response.data;
