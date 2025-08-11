@@ -63,9 +63,9 @@ export type PaginatedResponse<T> = {
 };
 
 export type MeritAPIError = {
-  status: number;
+  status?: number;
   message: string;
-  request_id: string;
+  request_id?: string;
 }
 
 export type MeritSDKConfig = {
@@ -86,13 +86,48 @@ export type APIResponse<T> =
 
 
 export class MeritError extends Error {
-  status: number;
-  requestId: string;
+  status?: number;
+  requestId?: string;
 
-  constructor(error:MeritAPIError) {
+  constructor(error:MeritAPIError | Error) {
     super(error.message);
     this.name = 'MeritError';
-    this.status = error.status;
-    this.requestId = error.request_id;
+    this.status = 'status' in error ? error.status : undefined;
+    this.requestId = 'request_id' in error ? error.request_id : undefined;
+  }
+}
+
+export class BadRequestError extends MeritError {
+  constructor(error: MeritAPIError) {
+    super(error);
+    this.name = 'BadRequestError';
+  }
+}
+
+export class NotFoundError extends MeritError {
+  constructor(error: MeritAPIError) {
+    super(error);
+    this.name = 'NotFoundError';
+  }
+}
+
+export class UnauthorizedError extends MeritError {
+  constructor(error: MeritAPIError) {
+    super(error);
+    this.name = 'UnauthorizedError';
+  }
+}
+
+export class InternalServerError extends MeritError {
+  constructor(error: MeritAPIError) {
+    super(error);
+    this.name = 'InternalServerError';
+  }
+}
+
+export class RequestError extends MeritError {
+  constructor(error: Error) {
+    super(error);
+    this.name = 'TransportError';
   }
 }

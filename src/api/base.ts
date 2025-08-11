@@ -1,4 +1,4 @@
-import type { APIResponse } from '../types.js';
+import { BadRequestError, InternalServerError, NotFoundError, UnauthorizedError, MeritError, type APIResponse } from '../types.js';
 
 export abstract class BaseAPI {
   protected readonly apiKey: string;
@@ -9,13 +9,13 @@ export abstract class BaseAPI {
     this.baseURL = baseURL;
   }
 
-  protected async request<T>(endpoint: string): Promise<APIResponse<T>> {
+  protected async request<T>(endpoint: string): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
 
     try {
       const response = await fetch(url, {
         headers: {
-          Authorization: `Bearer ${this.apiKey}`,
+          'x-api-key': this.apiKey,
           'Content-Type': 'application/json',
         },
       });
@@ -23,28 +23,42 @@ export abstract class BaseAPI {
       const data = await response.json();
 
       if (!response.ok) {
-        return {
-          success: false,
-          error: {
-            code: response.status.toString(),
-            message: data.message ?? 'Unknown error occurred',
-          },
-        };
+        switch (data.status) {
+          case 400:
+            throw new BadRequestError({
+              status: response.status,
+              message: data.message ?? 'Unknown error occurred',
+            }) ;
+          case 401:
+            throw new UnauthorizedError({
+              status: response.status,
+              message: data.message ?? 'Unknown error occurred',
+            });
+          case 404:
+            throw new NotFoundError({
+              status: response.status,
+              message: data.message ?? 'Unknown error occurred',
+            });
+          case 500:
+            throw new InternalServerError({
+              status: response.status,
+              message: data.message ?? 'Unknown error occurred',
+            });
+          default:
+            throw new MeritError({
+              status: response.status,
+              message: data.message ?? 'Unknown error occurred',
+            });
+        }
       }
 
-      return {
-        success: true,
-        data,
-      };
+      return data;
     } catch (error) {
-      return {
-        success: false,
-        error: {
-          code: 'NETWORK_ERROR',
-          message:
-            error instanceof Error ? error.message : 'Network request failed',
-        },
-      };
+      throw new MeritError({
+        status: 0,
+        message:
+          error instanceof Error ? error.message : 'Network request failed',
+      });
     }
   }
 
@@ -58,7 +72,7 @@ export abstract class BaseAPI {
       const response = await fetch(url, {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${this.apiKey}`,
+          'x-api-key': this.apiKey,
           'Content-Type': 'application/json',
         },
         body: body ? JSON.stringify(body) : undefined,
@@ -70,7 +84,7 @@ export abstract class BaseAPI {
         return {
           success: false,
           error: {
-            code: response.status.toString(),
+            status: response.status,
             message: data.message ?? 'Unknown error occurred',
           },
         };
@@ -84,7 +98,7 @@ export abstract class BaseAPI {
       return {
         success: false,
         error: {
-          code: 'NETWORK_ERROR',
+          status: 0,
           message:
             error instanceof Error ? error.message : 'Network request failed',
         },

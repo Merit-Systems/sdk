@@ -6,7 +6,7 @@ export class BalancesAPI extends BaseAPI {
    * Get user balance by GitHub login/username
    * @param login - The GitHub username (e.g., 'octocat')
    * @returns Promise resolving to user balance information
-   * @throws Error if the user is not found or API request fails
+   * @throws MeritError if the user is not found or API request fails
    * @example
    * ```typescript
    * const userBalance = await sdk.balances.getUserBalanceByLogin('octocat');
@@ -17,18 +17,14 @@ export class BalancesAPI extends BaseAPI {
   async getUserBalanceByLogin(login: string): Promise<UserBalance> {
     const response = await this.request<UserBalance>(`/users/${login}/balance`);
 
-    if (!response.success) {
-      throw new MeritError(response.error);
-    }
-
-    return response.data;
+    return response;
   }
 
   /**
    * Get user balance by GitHub ID
    * @param githubId - The GitHub user ID (64-bit integer, e.g., 583231)
    * @returns Promise resolving to user balance information
-   * @throws Error if the user is not found or API request fails
+   * @throws MeritError if the user is not found or API request fails
    * @example
    * ```typescript
    * const userBalance = await sdk.balances.getUserBalanceByGithubId(583231);
@@ -41,11 +37,7 @@ export class BalancesAPI extends BaseAPI {
       `/user/${githubId}/balance`
     );
 
-    if (!response.success) {
-      throw new MeritError(response.error);
-    }
-
-    return response.data;
+    return response;
   }
 
   /**
@@ -53,7 +45,7 @@ export class BalancesAPI extends BaseAPI {
    * @param owner - The owner of the repository (e.g., 'octocat')
    * @param repo - The name of the repository (e.g., 'hello-world')
    * @returns Promise resolving to repository balance information
-   * @throws Error if the repository is not found or API request fails
+   * @throws MeritError if the repository is not found or API request fails
    * @example
    * ```typescript
    * const repoBalance = await sdk.balances.getRepoBalanceByName('octocat', 'hello-world');
@@ -64,18 +56,14 @@ export class BalancesAPI extends BaseAPI {
   async getRepoBalanceByName(owner: string, repo: string): Promise<RepoBalance> {
     const response = await this.request<RepoBalance>(`/repos/${owner}/${repo}/balance`);
 
-    if (!response.success) {
-      throw new MeritError(response.error);
-    }
-
-    return response.data;
+    return response;
   }
 
   /**
    * Get repository balance by repository ID
    * @param githubId - The GitHub repository ID (64-bit integer, e.g., 123456)
    * @returns Promise resolving to repository balance information
-   * @throws Error if the repository is not found or API request fails
+   * @throws MeritError if the repository is not found or API request fails
    * @example
    * ```typescript
    * const repoBalance = await sdk.balances.getRepoBalanceByRepoId(123456);
@@ -85,11 +73,7 @@ export class BalancesAPI extends BaseAPI {
    */
   async getRepoBalanceByRepoId(githubId: number): Promise<RepoBalance> {
     const response = await this.request<RepoBalance>(`/repositories/${githubId}/balance`);
-
-    if (!response.success) {
-      throw new MeritError(response.error);
-    }
-
-    return response.data;
+    
+    return response;
   }
 }

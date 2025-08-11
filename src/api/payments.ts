@@ -39,10 +39,6 @@ export class PaymentsAPI extends BaseAPI {
 
     const response = await this.request<PaginatedResponse<OutgoingPayment>>(endpoint);
 
-    if (!response.success) {
-      throw new MeritError(response.error);
-    }
-
-    return response.data;
+    return response;
   }
 }
