@@ -1,4 +1,4 @@
-import { MeritError, type OutgoingPayment, type OutgoingUserPaymentsParams, type PaginatedResponse } from '../types.js';
+import { type OutgoingPayment, type OutgoingUserPaymentsParams, type PaginatedResponse } from '../types.js';
 import { BaseAPI } from './base.js';
 
 export class PaymentsAPI extends BaseAPI {
