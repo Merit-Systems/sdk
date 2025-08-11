@@ -16,13 +16,13 @@ export type Amount = {
 }
 
 export type UserBalance = {
-  githubId: number;
+  github_id: number;
   login: string;
   balance: Amount;
 }
 
 export type RepoBalance = {
-  repoId: number;
+  repo_id: number;
   owner: string;
   repo: string;
   balance: Amount;
@@ -31,25 +31,25 @@ export type RepoBalance = {
 
 export type UserPayment = {
   type: 'UserPayment';
-  recipientId: number;
+  recipient_id: number;
 }
 
 export type RepoPayment = {
   type: 'RepoFund';
-  repoId: number;
+  repo_id: number;
 }
 
 export type OutgoingPayment = {
-  senderId: number;
+  sender_id: number;
   amount: Amount;
   token: string;
   timestamp: string;
-  txHash: string;
-  groupId?: string;
+  tx_hash: string;
+  group_id?: string;
 } & (UserPayment | RepoPayment);
 
 export type OutgoingUserPaymentsParams = {
-  groupId?: string;
+  group_id?: string;
   page_size?: number;
   page?: number;
 }
@@ -65,7 +65,7 @@ export type PaginatedResponse<T> = {
 export type MeritAPIError = {
   status: number;
   message: string;
-  requestId: string;
+  request_id: string;
 }
 
 export type MeritSDKConfig = {
@@ -93,6 +93,6 @@ export class MeritError extends Error {
     super(error.message);
     this.name = 'MeritError';
     this.status = error.status;
-    this.requestId = error.requestId;
+    this.requestId = error.request_id;
   }
 }

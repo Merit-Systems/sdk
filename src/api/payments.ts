@@ -28,7 +28,7 @@ export class PaymentsAPI extends BaseAPI {
     params?: OutgoingUserPaymentsParams,
   ): Promise<PaginatedResponse<OutgoingPayment>> {
     const queryParams = new URLSearchParams();
-    if (params?.groupId) queryParams.append('groupId', params.groupId);
+    if (params?.group_id) queryParams.append('group_id', params.group_id);
     if (params?.page_size) queryParams.append('page_size', params.page_size.toString());
     if (params?.page) queryParams.append('page', params.page.toString());
 
