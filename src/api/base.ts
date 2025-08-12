@@ -32,7 +32,7 @@ export abstract class BaseAPI {
 
         if (!response.ok) {
           // we have an structured json error from the server
-          switch (data.status) {
+          switch (response.status) {
             case 400:
               throw new BadRequestError({
                 status: response.status,
