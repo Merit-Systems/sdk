@@ -27,80 +27,58 @@ export abstract class BaseAPI {
         },
       });
 
-      try {
-        const data = await response.json();
-
-        if (!response.ok) {
-          // we have an structured json error from the server
-          switch (response.status) {
-            case 400:
-              throw new BadRequestError({
-                status: response.status,
-                message: data.message ?? 'Unknown error occurred',
-                request_id: data.request_id,
-              });
-            case 401:
-              throw new UnauthorizedError({
-                status: response.status,
-                message: data.message ?? 'Unknown error occurred',
-                request_id: data.request_id,
-              });
-            case 404:
-              throw new NotFoundError({
-                status: response.status,
-                message: data.message ?? 'Unknown error occurred',
-                request_id: data.request_id,
-              });
-            case 500:
-              throw new InternalServerError({
-                status: response.status,
-                message: data.message ?? 'Unknown error occurred',
-                request_id: data.request_id,
-              });
-            default:
-              throw new MeritError({
-                status: response.status,
-                message: data.message ?? 'Unknown error occurred',
-                request_id: data.request_id,
-              });
-          }
-        }
-        return data;
-      } catch {
-        switch (response.status) {
-          case 400:
-            throw new BadRequestError({
-              status: response.status,
-              message: response.statusText ?? 'Unknown error occurred',
-            });
-          case 401:
-            throw new UnauthorizedError({
-              status: response.status,
-              message: response.statusText ?? 'Unknown error occurred',
-            });
-          case 404:
-            throw new NotFoundError({
-              status: response.status,
-              message: response.statusText ?? 'Unknown error occurred',
-            });
-          case 500:
-            throw new InternalServerError({
-              status: response.status,
-              message: response.statusText ?? 'Unknown error occurred',
-            });
-          default:
-            throw new MeritError({
-              status: response.status,
-              message: response.statusText ?? 'Unknown error occurred',
-            });
-        }
+      // Handle non-2xx responses
+      if (!response.ok) {
+        await this.handleErrorResponse(response);
       }
+
+      return await response.json();
     } catch (error) {
+      // Re-throw Merit errors as-is
+      if (error instanceof MeritError) {
+        throw error;
+      }
+
+      // Network-level errors
       throw new MeritError({
         status: 0,
         message:
           error instanceof Error ? error.message : 'Network request failed',
       });
+    }
+  }
+
+  private async handleErrorResponse(response: Response): Promise<never> {
+    let errorMessage = 'Unknown error occurred';
+    let requestId: string | undefined;
+
+    // Try to parse JSON error response
+    try {
+      const errorData = await response.json();
+      errorMessage = errorData.message ?? errorMessage;
+      requestId = errorData.request_id;
+    } catch {
+      // Fallback to status text if JSON parsing fails
+      errorMessage = response.statusText || errorMessage;
+    }
+
+    const errorInfo = {
+      status: response.status,
+      message: errorMessage,
+      request_id: requestId,
+    };
+
+    switch (response.status) {
+      case 400:
+        throw new BadRequestError(errorInfo);
+      case 401:
+        throw new UnauthorizedError(errorInfo);
+      case 404:
+        throw new NotFoundError(errorInfo);
+      case 500:
+        throw new InternalServerError(errorInfo);
+      default:
+        throw new MeritError(errorInfo);
     }
   }
 
