@@ -1,18 +1,23 @@
 export { MeritSDK } from './client.js';
-export type {
-  CheckoutItem,
+export {
   BadRequestError,
-  NotFoundError,
-  UnauthorizedError,
   InternalServerError,
+  MeritError,
+  NotFoundError,
   RequestError,
+  UnauthorizedError,
+} from './types.js';
+export type {
+  APIResponse,
+  CheckoutItem,
   CheckoutParams,
+  MeritAPIError,
   MeritSDKConfig,
-  UserBalance,
-  RepoBalance,
-  UserPayment,
-  RepoPayment,
   OutgoingPayment,
   OutgoingUserPaymentsParams,
   PaginatedResponse,
+  RepoBalance,
+  RepoPayment,
+  UserBalance,
+  UserPayment,
 } from './types.js';

@@ -9,7 +9,7 @@ export class MeritSDK {
   public readonly checkout: CheckoutAPI;
 
   constructor(config: MeritSDKConfig) {
-    const baseURL = config.baseURL ?? 'https://api.merit.systems';
+    const baseURL = config.baseURL ?? 'https://api.merit.systems/v1';
     const checkoutURL =
       config.checkoutURL ?? 'https://terminal.merit.systems/checkout';
 

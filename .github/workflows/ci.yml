@@ -45,3 +45,8 @@ jobs:
 
       - name: Test
         run: pnpm run test
+
+      - name: API Integration Tests
+        run: pnpm run test:api
+        env:
+          MERIT_API_KEY: ${{ secrets.MERIT_API_KEY }}

@@ -2,42 +2,41 @@ export type CheckoutItem = {
   id: number; // GitHub ID (user or repo)
   type: 'user' | 'repo';
   amount: number;
-}
+};
 
 export type CheckoutParams = {
   items: CheckoutItem[];
   groupId?: string;
   senderGithubId?: number;
-}
+};
 
 export type Amount = {
   raw: string;
   formatted: string;
-}
+};
 
 export type UserBalance = {
-  github_id: number;
+  user_id: number;
   login: string;
   balance: Amount;
-}
+};
 
 export type RepoBalance = {
   repo_id: number;
   owner: string;
   repo: string;
   balance: Amount;
-}
-
+};
 
 export type UserPayment = {
   type: 'UserPayment';
   recipient_id: number;
-}
+};
 
 export type RepoPayment = {
   type: 'RepoFund';
   repo_id: number;
-}
+};
 
 export type OutgoingPayment = {
   sender_id: number;
@@ -52,7 +51,7 @@ export type OutgoingUserPaymentsParams = {
   group_id?: string;
   page_size?: number;
   page?: number;
-}
+};
 
 export type PaginatedResponse<T> = {
   items: T[];
@@ -66,13 +65,13 @@ export type MeritAPIError = {
   status?: number;
   message: string;
   request_id?: string;
-}
+};
 
 export type MeritSDKConfig = {
   apiKey: string;
   baseURL?: string;
   checkoutURL?: string;
-}
+};
 
 export type APIResponse<T> =
   | {
@@ -84,12 +83,11 @@ export type APIResponse<T> =
       success: false;
     };
 
-
 export class MeritError extends Error {
   status?: number;
   requestId?: string;
 
-  constructor(error:MeritAPIError | Error) {
+  constructor(error: MeritAPIError | Error) {
     super(error.message);
     this.name = 'MeritError';
     this.status = 'status' in error ? error.status : undefined;
