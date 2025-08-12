@@ -64,8 +64,8 @@ async function runTest(testName, testFn) {
 }
 
 // Test known GitHub users for balance checks
-const TEST_GITHUB_LOGIN = 'octocat'; // GitHub's mascot account
-const TEST_GITHUB_ID = 583231; // octocat's GitHub ID
+const TEST_GITHUB_LOGIN = 'rsproule'; // GitHub's mascot account
+const TEST_GITHUB_ID = 24497652; // octocat's GitHub ID
 
 async function main() {
   try {
@@ -134,7 +134,7 @@ async function main() {
       const payments = await merit.payments.getPaymentsBySender(
         TEST_GITHUB_ID,
         {
-          group_id: '12345678-1234-1234-1234-123456789abc',
+          group_id: 'fbb809b4-5359-4554-bfce-c0a8315bac4f',
           page_size: 5,
           page: 1,
         }
