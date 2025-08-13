@@ -8,6 +8,8 @@
 
 ## Types
 
+> **Source:** [`src/types.ts`](src/types.ts)
+
 ```typescript
 interface Amount {
   raw: string;
@@ -50,8 +52,12 @@ interface OutgoingUserPaymentsParams {
 
 ## User Balance
 
+> **Source:** [`src/api/balances.ts`](src/api/balances.ts)
+
 ### `GET /users/{login}/balance`
 Get user balance by GitHub login.
+
+> **Implementation:** [`getUserBalanceByLogin()`](src/api/balances.ts#L17-L21)
 
 **Response:**
 ```typescript
@@ -65,12 +71,18 @@ interface UserBalance {
 ### `GET /user/{user_id}/balance`
 Get user balance by user ID.
 
+> **Implementation:** [`getUserBalanceByGithubId()`](src/api/balances.ts#L35-L41)
+
 **Response:** `UserBalance`
 
 ## Repository Balance
 
+> **Source:** [`src/api/balances.ts`](src/api/balances.ts)
+
 ### `GET /repos/{owner}/{repo}/balance`
 Get repository balance by owner/repo name.
+
+> **Implementation:** [`getRepoBalanceByName()`](src/api/balances.ts#L56-L65)
 
 **Response:**
 ```typescript
@@ -85,12 +97,18 @@ interface RepoBalance {
 ### `GET /repositories/{repo_id}/balance`
 Get repository balance by repository ID.
 
+> **Implementation:** [`getRepoBalanceByRepoId()`](src/api/balances.ts#L79-L85)
+
 **Response:** `RepoBalance`
 
 ## User Payments
 
+> **Source:** [`src/api/payments.ts`](src/api/payments.ts)
+
 ### `GET /user/{user_id}/payments`
 Get paginated user payments sent by the user.
+
+> **Implementation:** [`getPaymentsBySender()`](src/api/payments.ts#L30-L49)
 
 **Query Parameters:**
 - `group_id?: string` - Filter by specific group ID (UUID)
@@ -102,6 +120,8 @@ Get paginated user payments sent by the user.
 ## SDK Usage
 
 ### Balance APIs
+
+> **Source:** [`src/api/balances.ts`](src/api/balances.ts)
 
 ```typescript
 import { MeritSDK } from '@merit-systems/sdk';
@@ -126,6 +146,8 @@ const repoBalance2 = await merit.balances.getRepoBalanceByRepoId(123456);
 
 ### Payments APIs
 
+> **Source:** [`src/api/payments.ts`](src/api/payments.ts)
+
 ```typescript
 // Get all payments sent by user
 const payments = await merit.payments.getPaymentsBySender(583231);
@@ -145,6 +167,8 @@ const groupPayments = await merit.payments.getPaymentsBySender(583231, {
 
 ### Checkout APIs
 
+> **Source:** [`src/api/checkout.ts`](src/api/checkout.ts)
+
 ```typescript
 // Generate checkout URL
 const checkoutUrl = merit.checkout.generateCheckoutUrl({
@@ -161,6 +185,8 @@ const groupId = merit.checkout.generateGroupId();
 ```
 
 ## Error Handling
+
+> **Source:** [`src/types.ts`](src/types.ts#L86-L131) | **Implementation:** [`src/api/base.ts`](src/api/base.ts#L51-L82)
 
 The SDK throws specific error types for different HTTP status codes:
 
