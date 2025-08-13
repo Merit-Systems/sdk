@@ -18,14 +18,14 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint src/**/*.ts test/**/*.mjs",
-    "lint:fix": "eslint src/**/*.ts test/**/*.mjs --fix",
-    "format": "prettier --write src/**/*.ts test/**/*.mjs",
-    "format:check": "prettier --check src/**/*.ts test/**/*.mjs",
+    "lint": "eslint src/**/*.ts test/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts test/**/*.ts --fix",
+    "format": "prettier --write src/**/*.ts test/**/*.ts",
+    "format:check": "prettier --check src/**/*.ts test/**/*.ts",
     "check": "pnpm run typecheck && pnpm run lint && pnpm run format:check",
     "fix": "pnpm run format && pnpm run lint:fix",
-    "test": "pnpm run build && node test/basic.test.mjs",
-    "test:api": "pnpm run build && node test/api.test.mjs",
+    "test": "tsx test/basic.test.ts",
+    "test:api": "tsx test/api.test.ts",
     "test:all": "pnpm run test && pnpm run test:api",
     "test:ci": "pnpm run check && pnpm run test",
     "prepublishOnly": "pnpm run test:ci",
@@ -50,7 +50,8 @@
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
     "eslint": "^9.0.0",
-    "prettier": "^3.0.0"
+    "prettier": "^3.0.0",
+    "tsx": "^4.0.0"
   },
   "engines": {
     "node": ">=18"

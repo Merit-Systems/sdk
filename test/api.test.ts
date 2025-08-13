@@ -5,9 +5,9 @@
  * Tests real API endpoints with actual API key
  *
  * Usage:
- *   MERIT_API_KEY=your_key_here node test/api.test.mjs
+ *   MERIT_API_KEY=your_key_here tsx test/api.test.ts
  *   OR
- *   node test/api.test.mjs your_api_key_here
+ *   tsx test/api.test.ts your_api_key_here
  */
 
 import {
@@ -15,7 +15,7 @@ import {
   MeritSDK,
   NotFoundError,
   UnauthorizedError,
-} from '../dist/index.js';
+} from '../src/index.js';
 
 // Get API key from environment or command line
 const apiKey = process.env.MERIT_API_KEY || process.argv[2];
@@ -24,8 +24,8 @@ const baseURL =
 
 if (!apiKey) {
   console.log('❌ API key required. Provide it via:');
-  console.log('   Environment: MERIT_API_KEY=your_key node test/api.test.mjs');
-  console.log('   Command line: node test/api.test.mjs your_api_key');
+  console.log('   Environment: MERIT_API_KEY=your_key tsx test/api.test.ts');
+  console.log('   Command line: tsx test/api.test.ts your_api_key');
   console.log('');
   console.log(
     'Optional: Set base URL via MERIT_BASE_URL (defaults to staging-api.merit.systems)'
@@ -47,18 +47,26 @@ const merit = new MeritSDK({
 let testsPassed = 0;
 let testsFailed = 0;
 
-async function runTest(testName, testFn) {
+async function runTest(
+  testName: string,
+  testFn: () => Promise<void>
+): Promise<void> {
   try {
     console.log(`✅ ${testName}`);
     await testFn();
     console.log(`   ✓ Passed\n`);
     testsPassed++;
   } catch (error) {
-    console.error(`   ❌ Failed: ${error.message}`);
-    if (error.status) {
-      console.error(`   Status: ${error.status}`);
+    const message = error instanceof Error ? error.message : String(error);
+    const errorType =
+      error instanceof Error ? error.constructor.name : 'Unknown';
+    console.error(`   ❌ Failed: ${message}`);
+    if (error instanceof Error && 'status' in error) {
+      console.error(
+        `   Status: ${(error as Error & { status: number }).status}`
+      );
     }
-    console.error(`   Error type: ${error.constructor.name}\n`);
+    console.error(`   Error type: ${errorType}\n`);
     testsFailed++;
   }
 }
@@ -67,7 +75,7 @@ async function runTest(testName, testFn) {
 const TEST_GITHUB_LOGIN = 'rsproule'; // GitHub's mascot account
 const TEST_GITHUB_ID = 24497652; // octocat's GitHub ID
 
-async function main() {
+async function main(): Promise<void> {
   try {
     // Test 1: Balance by login (valid user)
     await runTest('Balance by GitHub login (valid user)', async () => {
@@ -169,13 +177,16 @@ async function main() {
           );
         } else {
           throw new Error(
-            `Expected UnauthorizedError or MeritError, got: ${error.constructor.name}`
+            `Expected UnauthorizedError or MeritError, got: ${error instanceof Error ? error.constructor.name : 'unknown'}`
           );
         }
       }
     });
   } catch (error) {
-    console.error('❌ Test suite failed:', error.message);
+    console.error(
+      '❌ Test suite failed:',
+      error instanceof Error ? error.message : String(error)
+    );
     testsFailed++;
   }
 
@@ -195,7 +206,7 @@ async function main() {
     if (baseURL.includes('staging')) {
       console.log('\n💡 Try testing against production API:');
       console.log(
-        '   MERIT_BASE_URL=https://api.merit.systems/v1 pnpm run test:api your_api_key'
+        '   MERIT_BASE_URL=https://api.merit.systems/v1 tsx test/api.test.ts your_api_key'
       );
     }
 
@@ -206,6 +217,9 @@ async function main() {
 }
 
 main().catch(error => {
-  console.error('❌ Test runner crashed:', error);
+  console.error(
+    '❌ Test runner crashed:',
+    error instanceof Error ? error.message : String(error)
+  );
   process.exit(1);
 });
