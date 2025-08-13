@@ -34,8 +34,11 @@ export default [
   {
     files: ['test/**/*.{js,mjs,ts}'],
     languageOptions: {
-      ecmaVersion: 'latest',
-      sourceType: 'module',
+      parser: tsparser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+      },
       globals: {
         console: 'readonly',
         process: 'readonly',
@@ -43,9 +46,14 @@ export default [
         URLSearchParams: 'readonly',
       },
     },
+    plugins: {
+      '@typescript-eslint': tseslint,
+    },
     rules: {
       'no-console': 'off', // Allow console in tests
       'prefer-const': 'error',
+      '@typescript-eslint/no-unused-vars': 'error',
+      '@typescript-eslint/no-explicit-any': 'error',
     },
   },
   {

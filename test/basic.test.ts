@@ -5,7 +5,7 @@
  * Tests core functionality: SDK instantiation and checkout URL generation
  */
 
-import { MeritSDK } from '../dist/index.js';
+import { MeritSDK } from '../src/index.js';
 
 console.log('🧪 Testing Merit SDK...\n');
 
@@ -87,6 +87,9 @@ try {
   console.log('\n✅ Test 6: URL parameter validation');
   const testUrl = new URL(userCheckoutUrl);
   const recipientsString = testUrl.searchParams.get('recipients');
+  if (!recipientsString) {
+    throw new Error('Recipients parameter missing');
+  }
   const recipients = recipientsString.split(',');
   if (!Array.isArray(recipients) || recipients.length !== 1) {
     throw new Error('Invalid recipients encoding');
@@ -98,7 +101,12 @@ try {
 
   console.log('\n🎉 All tests passed! SDK is working correctly.\n');
 } catch (error) {
-  console.error('\n❌ Test failed:', error.message);
-  console.error('Error details:', error);
+  console.error(
+    '\n❌ Test failed:',
+    error instanceof Error ? error.message : String(error)
+  );
+  if (error instanceof Error) {
+    console.error('Error details:', error);
+  }
   process.exit(1);
 }
