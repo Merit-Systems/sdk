@@ -35,7 +35,7 @@ export class CheckoutAPI {
    * ```
    */
   generateCheckoutUrl(params: CheckoutParams): string {
-    const { items, groupId, senderGithubId } = params;
+    const { items, groupId, senderGithubId, title, description } = params;
     const encodedItems = items
       .map(item => {
         const amount = item.amount.toFixed(2);
@@ -59,6 +59,14 @@ export class CheckoutAPI {
     // Add sender if provided
     if (senderGithubId) {
       url.searchParams.set('sender', senderGithubId.toString());
+    }
+
+    if (title) {
+      url.searchParams.set('title', title);
+    }
+
+    if (description) {
+      url.searchParams.set('desc', description);
     }
 
     return url.toString();

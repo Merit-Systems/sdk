@@ -8,6 +8,8 @@ export type CheckoutParams = {
   items: CheckoutItem[];
   groupId?: string;
   senderGithubId?: number;
+  title?: string;
+  description?: string;
 };
 
 export type Amount = {
