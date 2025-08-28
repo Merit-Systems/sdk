@@ -41,6 +41,8 @@ interface OutgoingPayment {
   timestamp: string;
   tx_hash: string;
   group_id?: string;
+  claim_status?: 'Claimed' | 'Deposited' | 'Reclaimed';
+  claim_deadline?: string;
 } & (UserPayment | RepoPayment);
 
 interface OutgoingUserPaymentsParams {
