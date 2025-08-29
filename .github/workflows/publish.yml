@@ -2,8 +2,7 @@ name: Publish to npm
 
 on:
   push:
-    tags:
-      - 'v*' # Only publish when you push a tag like v0.1.0
+    branches: [master]
 
 jobs:
   publish:
