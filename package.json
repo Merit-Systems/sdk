@@ -1,6 +1,6 @@
 {
   "name": "@merit-systems/sdk",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "TypeScript SDK for the Merit Systems API",
   "type": "module",
   "main": "./dist/index.js",
