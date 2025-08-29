@@ -35,7 +35,8 @@ export class CheckoutAPI {
    * ```
    */
   generateCheckoutUrl(params: CheckoutParams): string {
-    const { items, groupId, senderGithubId, title, description } = params;
+    const { items, groupId, senderGithubId, title, description, redirectUrl } =
+      params;
     const encodedItems = items
       .map(item => {
         const amount = item.amount.toFixed(2);
@@ -67,6 +68,10 @@ export class CheckoutAPI {
 
     if (description) {
       url.searchParams.set('desc', description);
+    }
+
+    if (redirectUrl) {
+      url.searchParams.set('redirect', redirectUrl);
     }
 
     return url.toString();

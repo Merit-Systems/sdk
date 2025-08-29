@@ -10,6 +10,7 @@ export type CheckoutParams = {
   senderGithubId?: number;
   title?: string;
   description?: string;
+  redirectUrl?: string;
 };
 
 export type Amount = {
