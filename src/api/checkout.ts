@@ -4,9 +4,7 @@ import type { CheckoutParams } from '../types.js';
 export class CheckoutAPI {
   private readonly baseCheckoutURL: string;
 
-  constructor(
-    baseCheckoutURL: string = 'https://terminal.merit.systems/checkout'
-  ) {
+  constructor(baseCheckoutURL: string = 'https://terminal.merit.systems/pay') {
     this.baseCheckoutURL = baseCheckoutURL;
   }
 

@@ -89,7 +89,7 @@
                         return '';
                     }).filter(Boolean);
 
-                    const url = new URL('https://terminal.merit.systems/checkout');
+                    const url = new URL('https://terminal.merit.systems/pay');
                     url.searchParams.set('recipients', encodedItems.join(','));
 
                     const finalGroupId = groupId || this.generateGroupId();

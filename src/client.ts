@@ -11,7 +11,7 @@ export class MeritSDK {
   constructor(config: MeritSDKConfig) {
     const baseURL = config.baseURL ?? 'https://api.merit.systems/v1';
     const checkoutURL =
-      config.checkoutURL ?? 'https://terminal.merit.systems/checkout';
+      config.checkoutURL ?? 'https://terminal.merit.systems/pay';
 
     this.balances = new BalancesAPI(config.apiKey, baseURL);
     this.payments = new PaymentsAPI(config.apiKey, baseURL);
