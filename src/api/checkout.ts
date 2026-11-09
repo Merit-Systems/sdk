@@ -37,6 +37,12 @@ export class CheckoutAPI {
       params;
     const encodedItems = items
       .map(item => {
+        if (!Number.isFinite(item.amount) || item.amount <= 0) {
+          throw new Error(
+            `Invalid checkout amount: amount must be a positive finite number, got ${item.amount}`
+          );
+        }
+
         const amount = item.amount.toFixed(2);
 
         if (item.type === 'user') {

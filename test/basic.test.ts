@@ -99,6 +99,30 @@ try {
   }
   console.log('   ✓ Recipients parameter correctly encoded:', recipientsString);
 
+  // Test 7: Reject invalid checkout item amounts
+  console.log('\n✅ Test 7: Reject invalid checkout item amounts');
+  const invalidAmounts = [0, -1, -50.25, NaN, Infinity, -Infinity];
+  for (const amount of invalidAmounts) {
+    let threw = false;
+    try {
+      merit.checkout.generateCheckoutUrl({
+        items: [{ id: 583231, type: 'user', amount }],
+      });
+    } catch (err) {
+      threw = true;
+      if (
+        !(err instanceof Error) ||
+        !err.message.includes('Invalid checkout amount')
+      ) {
+        throw new Error(`Unexpected error message for amount ${amount}: ${err}`);
+      }
+    }
+    if (!threw) {
+      throw new Error(`Failed to reject invalid checkout amount: ${amount}`);
+    }
+  }
+  console.log('   ✓ Rejected 0, negative, NaN, and Infinity amounts correctly');
+
   console.log('\n🎉 All tests passed! SDK is working correctly.\n');
 } catch (error) {
   console.error(
